@@ -1,0 +1,41 @@
+git-find-rewritten
+===============
+
+a tiny utility to find a new SHA of the same commit when you have the old SHA.
+useful when rebasing often.
+
+setup
+-----
+
+requires git version >= 2.41.0, because of the --abbrev option
+for git-range-diff to print the full commit SHA.
+see https://github.com/git/git/commit/2b15969f61425afb2f1e67aa48ea73d2f10d8eb9
+
+```
+git clone https://github.com/kiprasmel/git-find-rewritten.git
+# or:  git clone git@github.com:kiprasmel/git-find-rewritten.git
+
+cd git-find-rewritten
+
+cp git-find-rewritten /usr/local/bin/
+```
+
+usage
+-----
+
+```
+git-find-rewritten <committish> [<extra git range-diff opts>]
+```
+
+
+environment variables
+---------------------
+
+- DEBUG - if set, will print debug info to stderr.
+
+see also
+--------
+
+- man git-range-diff
+- https://github.com/kiprasmel/git-rebase-diff
+

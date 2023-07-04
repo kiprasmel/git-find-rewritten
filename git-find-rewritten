@@ -1,0 +1,31 @@
+#!/bin/sh
+
+ORIGINAL_COMMIT="$1"
+shift
+
+USAGE="\
+usage:
+git-find-rewritten <committish> [<extra git range-diff opts>]
+
+"
+
+[ -z "$ORIGINAL_COMMIT" ] && {
+	printf "$USAGE"
+	exit 1
+}
+
+gfr_debug() {
+	[ -n "$DEBUG" ] && {
+		>&2 echo "$1"
+	}
+}
+
+MERGE_BASE="$(git merge-base HEAD "$ORIGINAL_COMMIT")" #
+gfr_debug "ORIGINAL_COMMIT $ORIGINAL_COMMIT\nMERGE_BASE $MERGE_BASE"
+
+RANGE_DIFF_LINE="$(git range-diff $* --abbrev=40 "$MERGE_BASE..$ORIGINAL_COMMIT" "$MERGE_BASE..@" | grep "$ORIGINAL_COMMIT")"
+gfr_debug "$RANGE_DIFF_LINE\n"
+
+NEW_COMMIT="$(printf "$RANGE_DIFF_LINE" | cut -d: -f3 | cut -d' ' -f3)"
+
+printf "$NEW_COMMIT\n"
